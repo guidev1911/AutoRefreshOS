@@ -1,9 +1,6 @@
 import customtkinter as ctk
 import keyring
 
-# =========================================================
-# CONFIGURAÇÕES
-# =========================================================
 
 SERVICO = "BOT_DETRAN"
 
@@ -11,15 +8,106 @@ ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("dark-blue")
 
 
-# =========================================================
-# FUNÇÕES
-# =========================================================
+def alternar_senha(entry, botao):
+    """
+    Alterna entre mostrar e ocultar a senha.
+    """
+
+    if entry.cget("show") == "*":
+
+        entry.configure(
+            show=""
+        )
+
+        botao.configure(
+            text="🙈"
+        )
+
+    else:
+
+        entry.configure(
+            show="*"
+        )
+
+        botao.configure(
+            text="👁"
+        )
+
+
+def criar_campo_senha(parent, placeholder_text):
+    """
+    Cria um campo de senha com botão de visualizar/ocultar.
+    """
+
+    frame = ctk.CTkFrame(
+        parent,
+        fg_color="transparent"
+    )
+
+    frame.grid_columnconfigure(
+        0,
+        weight=1
+    )
+
+    entry = ctk.CTkEntry(
+        frame,
+        height=28,
+        show="*",
+        placeholder_text=placeholder_text
+    )
+
+    entry.grid(
+        row=0,
+        column=0,
+        sticky="ew"
+    )
+
+    botao = ctk.CTkButton(
+        frame,
+        text="👁",
+        width=40,
+        height=28,
+        corner_radius=8,
+        command=lambda: alternar_senha(
+            entry,
+            botao
+        )
+    )
+
+    botao.grid(
+        row=0,
+        column=1,
+        padx=(8, 0)
+    )
+
+    return frame, entry
+
 
 def salvar():
-    keyring.set_password(SERVICO, "usuario_intr", entry_intr_user.get())
-    keyring.set_password(SERVICO, "senha_intr", entry_intr_pass.get())
-    keyring.set_password(SERVICO, "usuario_portal", entry_portal_user.get())
-    keyring.set_password(SERVICO, "senha_portal", entry_portal_pass.get())
+
+    keyring.set_password(
+        SERVICO,
+        "usuario_intr",
+        entry_intr_user.get()
+    )
+
+    keyring.set_password(
+        SERVICO,
+        "senha_intr",
+        entry_intr_pass.get()
+    )
+
+    keyring.set_password(
+        SERVICO,
+        "usuario_portal",
+        entry_portal_user.get()
+    )
+
+    keyring.set_password(
+        SERVICO,
+        "senha_portal",
+        entry_portal_pass.get()
+    )
 
     status.configure(
         text="✔ Credenciais salvas com sucesso!",
@@ -28,36 +116,55 @@ def salvar():
 
 
 def limpar():
-    entry_intr_user.delete(0, "end")
-    entry_intr_pass.delete(0, "end")
-    entry_portal_user.delete(0, "end")
-    entry_portal_pass.delete(0, "end")
+
+    entry_intr_user.delete(
+        0,
+        "end"
+    )
+
+    entry_intr_pass.delete(
+        0,
+        "end"
+    )
+
+    entry_portal_user.delete(
+        0,
+        "end"
+    )
+
+    entry_portal_pass.delete(
+        0,
+        "end"
+    )
 
     status.configure(
         text="Campos limpos.",
         text_color="#FFB703"
     )
 
-
-# =========================================================
-# JANELA
-# =========================================================
-
 janela = ctk.CTk()
 
-janela.title("Configurar Credenciais - Bot DETRAN")
+janela.title(
+    "Configurar Credenciais - Bot DETRAN"
+)
 
-# Aumentamos a altura para comportar todo o conteúdo
-janela.geometry("560x580")
-janela.minsize(520, 560)
-janela.resizable(False, False)
+janela.geometry(
+    "560x580"
+)
 
-janela.configure(fg_color="#0f172a")
+janela.minsize(
+    520,
+    560
+)
 
+janela.resizable(
+    False,
+    False
+)
 
-# =========================================================
-# FRAME PRINCIPAL
-# =========================================================
+janela.configure(
+    fg_color="#0f172a"
+)
 
 main_frame = ctk.CTkFrame(
     janela,
@@ -74,12 +181,10 @@ main_frame.pack(
     pady=18
 )
 
-main_frame.grid_columnconfigure(0, weight=1)
-
-
-# =========================================================
-# CABEÇALHO
-# =========================================================
+main_frame.grid_columnconfigure(
+    0,
+    weight=1
+)
 
 header = ctk.CTkFrame(
     main_frame,
@@ -94,14 +199,14 @@ header.grid(
     pady=(18, 6)
 )
 
-
 ctk.CTkLabel(
     header,
     text="Configuração do Bot DETRAN",
     font=("Segoe UI", 22, "bold"),
     text_color="#F8FAFC"
-).pack(anchor="w")
-
+).pack(
+    anchor="w"
+)
 
 ctk.CTkLabel(
     header,
@@ -112,11 +217,6 @@ ctk.CTkLabel(
     anchor="w",
     pady=(3, 0)
 )
-
-
-# =========================================================
-# CAMPOS
-# =========================================================
 
 fields_frame = ctk.CTkFrame(
     main_frame,
@@ -131,12 +231,10 @@ fields_frame.grid(
     pady=(4, 0)
 )
 
-fields_frame.grid_columnconfigure(0, weight=1)
-
-
-# ---------------------------------------------------------
-# Usuário Intranet
-# ---------------------------------------------------------
+fields_frame.grid_columnconfigure(
+    0,
+    weight=1
+)
 
 ctk.CTkLabel(
     fields_frame,
@@ -149,7 +247,6 @@ ctk.CTkLabel(
     sticky="w",
     pady=(4, 3)
 )
-
 
 entry_intr_user = ctk.CTkEntry(
     fields_frame,
@@ -164,11 +261,6 @@ entry_intr_user.grid(
     pady=(0, 5)
 )
 
-
-# ---------------------------------------------------------
-# Senha Intranet
-# ---------------------------------------------------------
-
 ctk.CTkLabel(
     fields_frame,
     text="Senha Intranet",
@@ -181,25 +273,17 @@ ctk.CTkLabel(
     pady=(4, 3)
 )
 
-
-entry_intr_pass = ctk.CTkEntry(
+senha_intr_frame, entry_intr_pass = criar_campo_senha(
     fields_frame,
-    height=28,
-    show="*",
-    placeholder_text="Digite a senha da intranet"
+    "Digite a senha da intranet"
 )
 
-entry_intr_pass.grid(
+senha_intr_frame.grid(
     row=3,
     column=0,
     sticky="ew",
     pady=(0, 5)
 )
-
-
-# ---------------------------------------------------------
-# Usuário Portal
-# ---------------------------------------------------------
 
 ctk.CTkLabel(
     fields_frame,
@@ -212,7 +296,6 @@ ctk.CTkLabel(
     sticky="w",
     pady=(4, 3)
 )
-
 
 entry_portal_user = ctk.CTkEntry(
     fields_frame,
@@ -227,11 +310,6 @@ entry_portal_user.grid(
     pady=(0, 5)
 )
 
-
-# ---------------------------------------------------------
-# Senha Portal
-# ---------------------------------------------------------
-
 ctk.CTkLabel(
     fields_frame,
     text="Senha Portal",
@@ -244,25 +322,17 @@ ctk.CTkLabel(
     pady=(4, 3)
 )
 
-
-entry_portal_pass = ctk.CTkEntry(
+senha_portal_frame, entry_portal_pass = criar_campo_senha(
     fields_frame,
-    height=28,
-    show="*",
-    placeholder_text="Digite a senha do portal"
+    "Digite a senha do portal"
 )
 
-entry_portal_pass.grid(
+senha_portal_frame.grid(
     row=7,
     column=0,
     sticky="ew",
     pady=(0, 4)
 )
-
-
-# =========================================================
-# CARREGAR CREDENCIAIS SALVAS
-# =========================================================
 
 usuario_intr = keyring.get_password(
     SERVICO,
@@ -286,21 +356,35 @@ senha_portal = keyring.get_password(
 
 
 if usuario_intr:
-    entry_intr_user.insert(0, usuario_intr)
+
+    entry_intr_user.insert(
+        0,
+        usuario_intr
+    )
+
 
 if senha_intr:
-    entry_intr_pass.insert(0, senha_intr)
+
+    entry_intr_pass.insert(
+        0,
+        senha_intr
+    )
+
 
 if usuario_portal:
-    entry_portal_user.insert(0, usuario_portal)
+
+    entry_portal_user.insert(
+        0,
+        usuario_portal
+    )
+
 
 if senha_portal:
-    entry_portal_pass.insert(0, senha_portal)
 
-
-# =========================================================
-# BOTÕES
-# =========================================================
+    entry_portal_pass.insert(
+        0,
+        senha_portal
+    )
 
 buttons_frame = ctk.CTkFrame(
     main_frame,
@@ -315,7 +399,6 @@ buttons_frame.grid(
     pady=(8, 0)
 )
 
-
 btn_salvar = ctk.CTkButton(
     buttons_frame,
     text="Salvar Credenciais",
@@ -329,7 +412,6 @@ btn_salvar.pack(
     side="left",
     padx=(0, 12)
 )
-
 
 btn_limpar = ctk.CTkButton(
     buttons_frame,
@@ -346,11 +428,6 @@ btn_limpar.pack(
     side="left"
 )
 
-
-# =========================================================
-# STATUS
-# =========================================================
-
 status = ctk.CTkLabel(
     main_frame,
     text="",
@@ -366,10 +443,5 @@ status.grid(
     padx=22,
     pady=(8, 12)
 )
-
-
-# =========================================================
-# INICIAR
-# =========================================================
 
 janela.mainloop()
